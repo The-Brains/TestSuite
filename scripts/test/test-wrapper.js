@@ -1,8 +1,26 @@
 define([
         'jquery',
         'lodash',
-        '../util/find-get-param.js',
-    ], function($, _, FindGetParam) {
+    ], function($, _) {
+
+    var FindGetParam = function(parameterName, url = null) {
+        var result = null;
+        var tmp = [];
+
+        var url = url ? url : location.search;
+
+        url
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) {
+                    result = tmp[1] ? decodeURIComponent(tmp[1]) : true;
+                }
+            });
+        return result;
+    };
+
     var testWrapper = function() {
         this.currentTest = '';
         this.startTime = 0;
