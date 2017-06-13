@@ -121,18 +121,39 @@ define([
             return 'testBlock-' + _.replace(mainName, ' ', '_');
         }
 
+        this.createLink = function(name, textSize) {
+            if (!window.testFileName) {
+                window.testFileName = 'test.html';
+            }
+
+            $linkElem = $('<a>', {
+                href: `${window.testFileName}?grep=${name}`,
+                text: name,
+                class: `mdl-typography--display-${textSize}`,
+            });
+
+            $linkElem.css('text-decoration', 'none');
+            $linkElem.css('color', 'rgb(66,66,66)');
+            $linkElem.hover((event) => {
+                $(event.currentTarget).css('opacity', 0.7);
+            }, (event) => {
+                $(event.currentTarget).css('opacity', 1);
+            });
+
+            return $linkElem;
+        }
+
         this.getTestContainer = function(mainName) {
             var className = this.createTestClass(mainName);
             var $container = this.$resultContainer.find('.' + className);
 
             if (!$container.length) {
-                $container = $('<div>',{
-                    class: className,
-                });
+                $container = $('<div>',{ class: className });
                 $ul = $('<ul>');
-                $title = $('<h3>', {
-                    text: mainName,
-                });
+                $title = $('<h3>', {});
+
+                $title.append(this.createLink(mainName, 2));
+
                 $container.append($title);
                 $container.append($ul);
                 this.$resultContainer.append($container);
@@ -155,12 +176,15 @@ define([
                     <i class="material-icons mdl-list__item-avatar ${iconClass}">
                         ${iconName}
                     </i>
-                    ${name}
+
                 </span>
                 <span class="mdl-list__item-secondary-action">
                     ${secondaryBlock}
                 </span>`
             );
+
+            $($testStatus[0]).append(this.createLink(name, 'headline'));
+
             $result.append($testStatus);
             $container.append($result);
         }
