@@ -19,6 +19,5 @@ define(function() {
     // your application logic in there.
     requirejs([
         'scripts/test/classes-object-test.js',
-        'scripts/test/util-find-get-param-test.js',
     ]);
 });
